@@ -19,11 +19,6 @@ const shopItemSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    seller: {
-      type: String,
-      required: true,
-      ref: "user",
-    },
   },
   {
     timestamps: true,

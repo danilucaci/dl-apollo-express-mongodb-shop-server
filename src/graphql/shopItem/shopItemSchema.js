@@ -7,7 +7,6 @@ const shopItemSchema = gql`
     description: String!
     image: String
     price: Int!
-    seller: User!
   }
 
   input AddShopItemInput {

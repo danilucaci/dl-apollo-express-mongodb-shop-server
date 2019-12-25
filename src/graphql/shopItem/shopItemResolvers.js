@@ -14,7 +14,7 @@ module.exports = {
     },
   },
   Mutation: {
-    addShopItem: async (_, args, { db, user }) => {
+    addShopItem: async (_, args, { db }) => {
       const {
         input: { name = "", description = "", image = "", price = 0 } = {},
       } = args;
@@ -24,7 +24,6 @@ module.exports = {
         description,
         image,
         price,
-        seller: user.uid,
       });
 
       return shopItem;
@@ -47,14 +46,6 @@ module.exports = {
       const { input: { id } = {} } = args;
 
       return db.ShopItem.findByIdAndDelete(id).exec();
-    },
-  },
-  ShopItem: {
-    seller: async (shopItem, _, { db }) => {
-      return db.User.findOne({ _id: shopItem.seller })
-        .select("-__v -createdAt -updatedAt -role")
-        .lean({ virtuals: true })
-        .exec();
     },
   },
 };
