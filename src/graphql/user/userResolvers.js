@@ -31,7 +31,7 @@ module.exports = {
   },
   Mutation: {
     signup: async (_, args, { db }) => {
-      const { input: { id, displayName, email, role } = {} } = args;
+      const { input: { id, displayName, email, role, photoURL } = {} } = args;
 
       const currentUser = await db.User.findById(id)
         .lean({ virtuals: true })
@@ -45,20 +45,19 @@ module.exports = {
           displayName,
           email,
           role,
+          photoURL,
         });
 
         return newUser;
       }
     },
-    updateCurrentUser: async (_, args, { db }) => {
-      const { input: { displayName } = {} } = args;
-
-      const user = db.user;
+    updateCurrentUser: async (_, args, { db, user }) => {
+      const { input: { displayName, photoURL } = {} } = args;
 
       const updatedUser = await db.User.findByIdAndUpdate(
-        user.id,
-        { displayName },
-        { new: true },
+        { _id: user.uid },
+        { displayName, photoURL },
+        { new: true, omitUndefined: true },
       )
         .lean({ virtuals: true })
         .exec();

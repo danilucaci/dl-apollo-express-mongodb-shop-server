@@ -11,6 +11,7 @@ const userSchema = gql`
     displayName: String!
     email: String!
     role: Role!
+    photoURL: String
     cart: [CartItem!]!
     orders: [Order!]!
   }
@@ -20,10 +21,12 @@ const userSchema = gql`
     displayName: String!
     email: String!
     role: Role!
+    photoURL: String
   }
 
   input UpdateCurrentUserInput {
     displayName: String!
+    photoURL: String
   }
 
   input DeleteUserInput {
@@ -31,7 +34,7 @@ const userSchema = gql`
   }
 
   extend type Query {
-    user(id: ID!): User @authenticated
+    user(id: ID!): User! @authenticated
     users: [User!]! @authenticated
     currentUser: User! @authenticated
   }

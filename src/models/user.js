@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "The role is required"],
     },
+    photoURL: String,
   },
   {
     timestamps: true,
