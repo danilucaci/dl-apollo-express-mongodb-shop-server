@@ -21,6 +21,9 @@ const {
   apiSignin,
 } = require("./utils/auth");
 
+// const seed = require("./config/db/seed");
+// seed();
+
 app.use(json());
 app.use(helmet());
 app.use(
