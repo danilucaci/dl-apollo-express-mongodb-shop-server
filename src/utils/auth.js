@@ -1,6 +1,5 @@
 const firebaseAdmin = require("firebase-admin");
 const config = require("../config/config");
-const db = require("../models/index");
 
 firebaseAdmin.initializeApp({
   credential: firebaseAdmin.credential.cert(config.firebase.certConfig),
