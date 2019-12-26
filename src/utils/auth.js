@@ -55,8 +55,6 @@ async function getApiFirebaseUser(req, res, next) {
       },
     );
 
-    console.log({ apiFbUser: userClaims });
-
     firebaseAdmin
       .auth()
       .getUser(userClaims.uid)
@@ -104,8 +102,6 @@ async function getGraphQLFirebaseUser(req) {
 
     return user;
   } catch (error) {
-    console.error("Failed to fetch the GraphQL Firebase ID token: ", error);
-
     return null;
   }
 }
