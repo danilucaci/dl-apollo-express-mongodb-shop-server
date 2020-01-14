@@ -77,6 +77,36 @@ function getShopItemsEdges(arr) {
   }));
 }
 
+function getRestCursorOptions(after) {
+  let options = {};
+
+  if (after) {
+    options = {
+      _id: {
+        $lt: after,
+      },
+    };
+  }
+
+  return options;
+}
+
+function getRestFilterOptions(limit, skip) {
+  let filterOptions = {};
+
+  if (limit) {
+    filterOptions = {
+      limit: Number(limit) + 1,
+    };
+  }
+
+  if (skip) {
+    filterOptions.skip = skip;
+  }
+
+  return filterOptions;
+}
+
 module.exports = {
   calculateCartTotal,
   calculateItemTotal,
@@ -85,4 +115,6 @@ module.exports = {
   getCursorOptions,
   getFilterOptions,
   getShopItemsEdges,
+  getRestCursorOptions,
+  getRestFilterOptions,
 };

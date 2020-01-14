@@ -13,12 +13,15 @@ const db = require("./models/index");
 const schema = require("./graphql/schema");
 const connect = require("./config/db/connect");
 const userRouter = require("./routes/user");
+const shopItemsRouter = require("./routes/shopItems");
+const shopItemRouter = require("./routes/shopItem");
+const cartRouter = require("./routes/cart");
+const ordersRouter = require("./routes/orders");
 const {
   verifyApiAuthHeaders,
   getApiFirebaseUser,
   getGraphQLFirebaseUser,
   apiSignup,
-  apiSignin,
 } = require("./utils/auth");
 
 // const seed = require("./config/db/seed");
@@ -33,15 +36,28 @@ app.use(
 );
 app.use(morgan("dev"));
 app.post("/signup", apiSignup);
-app.post("/signin", apiSignin);
+app.use("/shop-items", shopItemsRouter);
+app.use("/shop-item", shopItemRouter);
 app.use("/api", verifyApiAuthHeaders);
 app.use("/api", getApiFirebaseUser);
 app.use("/api/user", userRouter);
+app.use("/api/cart", cartRouter);
+app.use("/api/orders", ordersRouter);
 app.use((err, req, res, next) => {
   console.log("Error Handler Middleware: ");
   console.error(err);
 
-  res.status(500).send();
+  if (req.headersSent) {
+    // When you add a custom error handler,
+    // you must delegate to the default Express error handler,
+    // when the headers have already been sent to the client:
+    return next(err);
+  }
+
+  res.status(500).send({
+    data: null,
+    error: "Something went wrong",
+  });
 });
 
 const server = new ApolloServer({

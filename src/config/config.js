@@ -8,7 +8,7 @@ module.exports = {
     name: process.env.DB_NAME,
   },
   cors: {
-    frontend: "http://localhost:3000",
+    frontend: ["http://localhost:3000", "http://localhost:3001"],
   },
   firebase: {
     databaseURL: process.env.FIREBASE_DATABASE_URL,

@@ -1,5 +1,6 @@
 const firebaseAdmin = require("firebase-admin");
 const config = require("../config/config");
+const db = require("../models/index");
 
 firebaseAdmin.initializeApp({
   credential: firebaseAdmin.credential.cert(config.firebase.certConfig),
@@ -20,7 +21,7 @@ function verifyApiAuthHeaders(req, res, next) {
 
     return res.status(401).send({
       data: null,
-      errors: "Unauthorized",
+      error: "Unauthorized",
     });
   }
 
@@ -37,7 +38,7 @@ async function getApiFirebaseUserClaims(req, res) {
 
     return res.status(401).send({
       data: null,
-      errors: "Unauthorized",
+      error: "Unauthorized",
     });
   }
 }
@@ -50,27 +51,24 @@ async function getApiFirebaseUser(req, res, next) {
 
         return res.status(401).send({
           data: null,
-          errors: "Unauthorized",
+          error: "Unauthorized",
         });
       },
     );
 
-    firebaseAdmin
+    const user = await firebaseAdmin
       .auth()
       .getUser(userClaims.uid)
-      .then((user) => {
-        console.log({ user });
-
-        req.user = user;
-      })
       .catch((error) => {
         console.error("Failed to fetch the Firebase User: ", error);
 
         return res.status(401).send({
           data: null,
-          errors: "Unauthorized",
+          error: "Unauthorized",
         });
       });
+
+    req.user = user;
 
     next();
   } catch (error) {
@@ -78,7 +76,7 @@ async function getApiFirebaseUser(req, res, next) {
 
     return res.status(401).send({
       data: null,
-      errors: "Unauthorized",
+      error: "Unauthorized",
     });
   }
 }
@@ -106,16 +104,37 @@ async function getGraphQLFirebaseUser(req) {
   }
 }
 
-async function apiSignin(req, res) {
-  res.status(200).send();
-}
+async function apiSignup(req, res, next) {
+  const { id, displayName, email, role, photoURL } = req.body;
 
-async function apiSignup(req, res) {
-  res.status(200).send();
+  const currentUser = await db.User.findById({ _id: id })
+    .select("-__v")
+    .lean({ virtuals: true })
+    .exec()
+    .catch(next);
+
+  if (currentUser) {
+    return res.status(200).send({
+      data: currentUser,
+      error: null,
+    });
+  } else {
+    const newUser = await db.User.create({
+      _id: id,
+      displayName,
+      email,
+      role,
+      photoURL,
+    }).catch(next);
+
+    return res.status(200).send({
+      data: newUser,
+      error: null,
+    });
+  }
 }
 
 module.exports = {
-  apiSignin,
   apiSignup,
   verifyApiAuthHeaders,
   getApiFirebaseUser,

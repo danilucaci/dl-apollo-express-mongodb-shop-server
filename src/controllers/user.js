@@ -8,11 +8,9 @@ async function currentUser(req, res) {
       .lean()
       .exec();
 
-    console.log(user);
-
     return res.status(200).send({
       data: user,
-      errors: null,
+      error: null,
     });
   } catch (error) {
     console.log("User not found ", error.message);
@@ -20,6 +18,24 @@ async function currentUser(req, res) {
   }
 }
 
+async function updateUser(req, res, next) {
+  const user = req.user;
+
+  const { displayName, photoURL } = req.body;
+
+  await db.User.findByIdAndUpdate(
+    { _id: user.uid },
+    { displayName, photoURL },
+    { new: true, omitUndefined: true },
+  )
+    .lean({ virtuals: true })
+    .exec()
+    .catch(next);
+
+  res.status(204).end();
+}
+
 module.exports = {
   currentUser,
+  updateUser,
 };
