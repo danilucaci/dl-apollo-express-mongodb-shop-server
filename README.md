@@ -4,7 +4,9 @@ Server for the fullstack graphql demo clothing store project made with Apollo
 Client & Server, React, Firebase Auth, MongoDB and Mongoose.
 
 <h3 align="center">
-  <a href="https://github.com/danilucaci/dl-apollo-express-mongodb-shop-client">Client</a>
+  <a href="https://github.com/danilucaci/dl-apollo-express-mongodb-shop-client">Apollo Client Front-End</a>
+  <span> · </span>
+  <a href="https://github.com/danilucaci/dl-apollo-express-mongodb-shop-rest-client">REST based Front-End</a>
   <span> · </span>
   <a href="https://github.com/danilucaci/dl-apollo-express-mongodb-shop-server">Server</a>
 </h3>
@@ -12,6 +14,7 @@ Client & Server, React, Firebase Auth, MongoDB and Mongoose.
 ## Project features
 
 - React with Apollo Client
+- React with rest api calls and `useContext`
 - Apollo Server Express and Express.js
 - MongoDB and Mongoose
 - firebase-auth authentication and authorization
