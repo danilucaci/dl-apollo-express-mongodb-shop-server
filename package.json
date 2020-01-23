@@ -5,6 +5,10 @@
   "private": true,
   "author": "Dani Lucaci <hello@danilucaci.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/danilucaci/dl-apollo-express-mongodb-shop-server.git"
+  },
   "scripts": {
     "test": "jest --watch",
     "dev": "nodemon ./src/index.js"
